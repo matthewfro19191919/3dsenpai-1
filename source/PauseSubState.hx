@@ -12,7 +12,7 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', "Options",'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'BotPlay', "Options",'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -23,13 +23,15 @@ class PauseSubState extends MusicBeatSubstate
 
 		openfl.Lib.current.stage.frameRate = 144;
 		
-		if (PlayState.storyPlaylist.length > 1 && PlayState.isStoryMode){
-			menuItems.insert(2, "Skip Song");
-		}
+		// if (PlayState.storyPlaylist.length > 1 && PlayState.isStoryMode){
+		// 	menuItems.insert(2, "Skip Song");
+		// }
 		
+		#if debug
 		if (!PlayState.isStoryMode){
 			menuItems.insert(2, "Chart Editor");
 		}
+		#end
 
 		if (!PlayState.isStoryMode && PlayState.sectionStart){
 			menuItems.insert(1, "Restart Section");
@@ -111,7 +113,10 @@ class PauseSubState extends MusicBeatSubstate
 					
 				case "Skip Song":
 					PlayState.instance.endSong();
-					
+										
+				case "BotPlay":
+					PlayState.autoplay = true;
+
 				case "Options":
 					PlayState.instance.switchState(new ConfigMenu());
 					ConfigMenu.exitTo = PlayState;
@@ -130,7 +135,9 @@ class PauseSubState extends MusicBeatSubstate
 					// 	default:
 					// 		PlayState.instance.switchState(new MainMenuState());
 					// }
-					PlayState.instance.switchState(new MainMenuState());
+					// PlayState.instance.switchState(new MainMenuState());
+					PlayState.instance.switchState(new Overworld());
+					
 					
 			}
 		}
